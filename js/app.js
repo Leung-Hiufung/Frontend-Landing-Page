@@ -31,6 +31,27 @@ const NAVBARLIST = document.getElementById('navbar__list');
  * 
 */
 
+/**
+ * calculate the absolute distance between section's top and windows's top
+ * find the section with the minimum value
+ * @returns the nearest section
+ */
+function getNearestSection() { 
+    let nearestSection = null;
+    let minDistance = Infinity;
+
+    SECTIONS.forEach(section => { 
+        const box = section.getBoundingClientRect();
+        const distance = Math.abs(box.top);
+
+        if (distance < minDistance) { 
+            minDistance = distance;
+            nearestSection = section;
+        }
+    });
+
+    return nearestSection;
+}
 
 
 /**
@@ -41,8 +62,8 @@ const NAVBARLIST = document.getElementById('navbar__list');
 
 
 
-// build the nav
 /**
+ * build the nav
  * Build the navigation bar based on the section title.
  * Section Tile is data-nav's content.
  * build like: <li><a class="menu_link" harf="#section 1">Section 1</a></li>
@@ -64,29 +85,25 @@ function buildNav() {
     NAVBARLIST.appendChild(newElement);
 }
 
-// Add class 'active' to section when near top of viewport
-
-
-// Scroll to anchor ID using scrollTO event
 
 
 /**
- * End Main Functions
- * Begin Events
- * 
-*/
+ * Add class 'active' to section when near top of viewport
+ */
+function makeActive() { 
+    const nearestSection = getNearestSection();
 
-document.addEventListener('DOMContentLoaded', readyFunction);
-
-function readyFunction() { 
-    buildNav();
-    scrollToSection();
-    document.addEventListener('scroll', makeActive);
+    if (nearestSection) { 
+        SECTIONS.forEach(section => { 
+            section.classList.remove('your-active-class');
+        });
+        nearestSection.classList.add('your-active-class');
+    }
 }
 
-// Build menu 
-
-// Scroll to section on link click
+/**
+ * Scroll to anchor ID using scrollTO event
+ */
 function scrollToSection() { 
     const links = document.getElementsByClassName('menu__link');
     for (let link of links) {
@@ -98,28 +115,22 @@ function scrollToSection() {
     }
 }
 
-// Set sections as active
-function makeActive() { 
-    let nearestSection = null;
-    let minDistance = Infinity;
 
-    // calculate the absolute distance between section's top and windows's top
-    // find the section with the minimum value
-    SECTIONS.forEach(section => { 
-        const box = section.getBoundingClientRect();
-        const distance = Math.abs(box.top);
+/**
+ * End Main Functions
+ * Begin Events
+ * 
+*/
 
-        if (distance < minDistance) { 
-            minDistance = distance;
-            nearestSection = section;
-        }
-    });
+document.addEventListener('DOMContentLoaded', readyFunction);
 
-    if (nearestSection) { 
-        SECTIONS.forEach(section => { 
-            section.classList.remove('your-active-class');
-        });
-        nearestSection.classList.add('your-active-class');
-    }
+function readyFunction() { 
+    // Build menu 
+    buildNav();
+
+    // Scroll to section on link click
+    scrollToSection();
+
+    // Set sections as active
+    document.addEventListener('scroll', makeActive);
 }
-
