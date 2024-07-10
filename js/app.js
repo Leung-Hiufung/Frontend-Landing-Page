@@ -22,6 +22,7 @@
  * Define Global Variables
  * 
 */
+var baseURL = window.location.href;
 const SECTIONS = document.querySelectorAll('section');
 const NAVBARLIST = document.getElementById('navbar__list');
 
@@ -125,6 +126,8 @@ function scrollToSection() {
 document.addEventListener('DOMContentLoaded', readyFunction);
 
 function readyFunction() { 
+    // set Base URL
+    document.querySelector('base').setAttribute('href', baseURL);
     // Build menu 
     buildNav();
 
